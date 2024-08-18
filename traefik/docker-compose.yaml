@@ -1,16 +1,23 @@
 ---
 # https://doc.traefik.io/traefik/
+networks:
+  mynet:
+    external: true
 services:
   reverse-proxy:
     # The official v2 Traefik docker image
     image: traefik:v2.10
+    networks:
+      mynet:
+        ipv4_address: 192.168.1.242
     # Enables the web UI and tells Traefik to listen to docker
     command: --api.insecure=true --providers.docker
     ports:
       # The HTTP port
-      - "70:80"
+      - "80:80"
+      - "443:443"
       # The Web UI (enabled by --api.insecure=true)
-      - "7070:8080"
+      - "8080:8080"
     volumes:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
