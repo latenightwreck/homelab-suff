@@ -1,0 +1,19 @@
+---
+services:
+  sabnzbd:
+    image: lscr.io/linuxserver/sabnzbd:latest
+    labels:
+      - "traefik.http.routers.sabnzbd.rule=Host(`sabnzbd.docker.localhost`)"
+      - "traefik.enable=true"
+    container_name: sabnzbd
+    environment:
+      - PUID=1000
+      - PGID=100
+      - TZ=America/New_York
+    volumes:
+      - /conf/sabnzbd:/config
+      - /srv/dev-disk-by-uuid-6966b8fd-3d2e-4bce-8352-f9bdc84bb3c8/torrents/complete:/downloads #optional
+      - /srv/dev-disk-by-uuid-6966b8fd-3d2e-4bce-8352-f9bdc84bb3c8/torrents/incomplete:/incomplete-downloads #optional
+    ports:
+      - 8080:8080
+    restart: unless-stopped
